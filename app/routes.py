@@ -14,7 +14,7 @@ from flask_login import current_user, login_required, login_user, logout_user
 @app.route('/index')
 @login_required
 def home():
-    return render_template('index.html', title="PokeAPI BattlerXXX!")
+    return render_template('index.html', title="PokeAPI Battler!")
 
 @app.route('/howitworks')
 def about():
@@ -103,10 +103,10 @@ def logout():
 @app.route('/signup', methods=['GET', 'POST'])
 def register():
     if current_user.is_authenticated:
-        return redirect(url_for('index'))
+        return redirect(url_for('home'))
     form = RegistrationForm()
     if form.validate_on_submit():
-        user = User(username=form.username.data, email=form.email.data)
+        user = User(name=form.name.data, email=form.email.data)
         user.set_password(form.password.data)
         db.session.add(user)
         db.session.commit()
