@@ -4,7 +4,7 @@ from flask import render_template, request, jsonify, redirect, url_for, flash
 import requests
 import json
 from app import services
-from .forms import PokeForm, PokeResults, LoginForm
+from .forms import PokeForm, LoginForm, RegistrationForm
 from app import db
 from app.models import Battle, User
 from flask_login import current_user, login_required, login_user, logout_user
@@ -50,7 +50,7 @@ def battle():
     else:
          winner = pokemon2
     print(winner.name)
-    battle = Battle(YourPokemon=pokemon1.name, OpponentsPokemon=pokemon2.name, Winner=winner.name)
+    battle = Battle(player= current_user, YourPokemon=pokemon1.name, OpponentsPokemon=pokemon2.name, Winner=winner.name)
     db.session.add(battle)
     db.session.commit()
     return render_template('letsbattle.html', form=form, title="Let's Battle!", winner=winner, pokemon1=pokemon1, pokemon2=pokemon2)
@@ -59,10 +59,14 @@ def battle():
 @login_required
 def results():
     id = request.args.get("id")
+    player = request.args.get("player")
     name = request.args.get("name")
     place = request.args.get("place")
     if id is not None:
         lines= Battle.query.filter_by(id = id)
+    elif player is not None:
+        user = User.query.filter(User.id == player).first()
+        lines = user.battles
     elif place is not None:
         if place == '1':
             lines= Battle.query.filter(Battle.YourPokemon == name)
@@ -95,3 +99,17 @@ def login():
 def logout():
     logout_user()
     return redirect(url_for('home'))
+
+@app.route('/signup', methods=['GET', 'POST'])
+def register():
+    if current_user.is_authenticated:
+        return redirect(url_for('index'))
+    form = RegistrationForm()
+    if form.validate_on_submit():
+        user = User(username=form.username.data, email=form.email.data)
+        user.set_password(form.password.data)
+        db.session.add(user)
+        db.session.commit()
+        flash('Congratulations, you are now a registered user!')
+        return redirect(url_for('login'))
+    return render_template('signup.html', title='Register', form=form)    

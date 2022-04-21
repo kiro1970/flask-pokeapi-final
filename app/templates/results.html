@@ -7,6 +7,7 @@
 <table class="table table-dark table-striped text-dark text-center w-100">
     <tr class="ts-3 ">
         <th>Battle ID</th>
+        <th>Trainer Name</th>
         <th>Your Pokemon</th>
         <th>Opponent's Pokemon</th>
         <th>Winner</th>
@@ -14,6 +15,7 @@
     {% for line in lines %}
     <tr class="text-dark m-2 text-center">
         <td><a href="/results?id={{line.id}}" >{{ line.id }}</a></td>
+        <td><a href="/results?player={{line.player.id}}" >{{ line.player.name }}</a></td>
         <td><a href="/results?name={{line.YourPokemon}}&place=1">{{ line.YourPokemon }}</a></td>
         <td><a href="/results?name={{line.OpponentsPokemon}}&place=2" >{{ line.OpponentsPokemon }}</a></td>
         <td><a href="/results?name={{line.Winner}}&place=3">{{ line.Winner }}</a></td>
