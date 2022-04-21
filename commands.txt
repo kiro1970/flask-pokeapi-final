@@ -1,2 +1,2 @@
-python3 -m venv venv installs virtual enviroment
+python -m venv venv installs virtual enviroment
 venv\Scripts\activate.bat -Starts virtual enviroment
