@@ -1,5 +1,6 @@
+from xmlrpc.client import Boolean
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, IntegerField
+from wtforms import StringField, SubmitField, IntegerField, PasswordField, BooleanField
 from wtforms.validators import DataRequired
 
 class PokeForm(FlaskForm):
@@ -10,4 +11,11 @@ class PokeForm(FlaskForm):
 class PokeResults(FlaskForm):
     battlenum = IntegerField('Choose your Pokemon', validators=[DataRequired()])
     submit = SubmitField()
+
+class LoginForm(FlaskForm):
+   name = StringField('Username', validators=[DataRequired()])
+   password = PasswordField('Password', validators=[DataRequired()])
+   remember_me = BooleanField('Remember Me')
+   submit = SubmitField('Sign In')
+   
 

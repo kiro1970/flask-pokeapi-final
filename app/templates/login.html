@@ -1,0 +1,29 @@
+{% extends 'components/layout.html' %}
+{% include 'components/footer.html' %}
+
+{% block content %}
+<div class="container m-1">
+        <form action="" method="POST">
+            <div class="row">
+                <div class="col-4">
+                    {{ form.hidden_tag() }}
+                    {{ form.name.label }}
+                    {{ form.name(class="form-control" ) }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-4">
+                    {{ form.password.label }}
+                    {{ form.password(class="form-control" ) }}
+                    </div>
+            </div>
+            <div class="row">
+                <div class="col-4 mt-2">
+                    {{ form.submit(class="form-control")}}
+                    {{ form.remember_me.label }}
+                    {{ form.remember_me(class="form-check-input")}}
+                </div>
+            </div>
+        </form>
+</div>
+{% endblock %}

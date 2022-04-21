@@ -1,14 +1,18 @@
 from urllib import response
 from app import app
-from flask import render_template, request,jsonify
+from flask import render_template, request, jsonify, redirect, url_for, flash
 import requests
 import json
 from app import services
-from .forms import PokeForm, PokeResults
+from .forms import PokeForm, PokeResults, LoginForm
 from app import db
-from app.models import BattleDB
+from app.models import Battle, User
+from flask_login import current_user, login_required, login_user, logout_user
+
 
 @app.route('/')
+@app.route('/index')
+@login_required
 def home():
     return render_template('index.html', title="PokeAPI BattlerXXX!")
 
@@ -17,6 +21,7 @@ def about():
     return render_template('howitworks.html', title="Learn how to battle!")
 
 @app.route('/letsbattle')
+@login_required
 def view():
     form = PokeForm()
     pokemon1 = None
@@ -24,6 +29,7 @@ def view():
     return render_template('letsbattle.html', title="Let's Battle!", form=form, pokemon1 = pokemon1, pokemon2 = pokemon2)
 
 @app.route('/letsbattle', methods=['POST'])
+@login_required
 def battle():
     form = PokeForm()
     pokemon1input = request.form.get("pokemon1input")
@@ -44,29 +50,48 @@ def battle():
     else:
          winner = pokemon2
     print(winner.name)
-    battle = BattleDB(YourPokemon=pokemon1.name, OpponentsPokemon=pokemon2.name, Winner=winner.name)
+    battle = Battle(YourPokemon=pokemon1.name, OpponentsPokemon=pokemon2.name, Winner=winner.name)
     db.session.add(battle)
     db.session.commit()
     return render_template('letsbattle.html', form=form, title="Let's Battle!", winner=winner, pokemon1=pokemon1, pokemon2=pokemon2)
 
 @app.route('/results', methods=['POST', 'GET']) 
+@login_required
 def results():
     id = request.args.get("id")
     name = request.args.get("name")
     place = request.args.get("place")
     if id is not None:
-        lines= BattleDB.query.filter_by(id = id)
+        lines= Battle.query.filter_by(id = id)
     elif place is not None:
         if place == '1':
-            lines= BattleDB.query.filter(BattleDB.YourPokemon == name)
+            lines= Battle.query.filter(Battle.YourPokemon == name)
         elif place == '2':
-            lines= BattleDB.query.filter(BattleDB.OpponentsPokemon == name)
+            lines= Battle.query.filter(Battle.OpponentsPokemon == name)
         else:
-            lines= BattleDB.query.filter(BattleDB.Winner == name)
+            lines= Battle.query.filter(Battle.Winner == name)
     else:
-        lines = BattleDB.query.all()
+        lines = Battle.query.all()
     
 
     return render_template('results.html', id=id, name=name, place=place, lines=lines)
     
 
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if current_user.is_authenticated:
+        return redirect(url_for('home'))
+    form = LoginForm()
+    if form.validate_on_submit():
+        user = User.query.filter_by(name=form.name.data).first()
+        if user is None or not user.check_password(form.password.data):
+            flash('Invalid username or password')
+            return redirect(url_for('login'))
+        login_user(user, remember=form.remember_me.data)
+        return redirect(url_for('home'))
+    return render_template('login.html', title='Sign In', form=form)
+
+@app.route('/logout')
+def logout():
+    logout_user()
+    return redirect(url_for('home'))
