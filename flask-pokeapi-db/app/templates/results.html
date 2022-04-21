@@ -1,0 +1,23 @@
+{% extends 'components/layout.html' %}
+{% include 'components/footer.html' %}
+
+{% block content %}
+<h3>Your last battle's result</h3>
+<a class="ts-3" href="/results">Show all!</a>
+<table class="table table-dark table-striped text-dark text-center w-100">
+    <tr class="ts-3 ">
+        <th>Battle ID</th>
+        <th>Your Pokemon</th>
+        <th>Opponent's Pokemon</th>
+        <th>Winner</th>
+    </tr>
+    {% for line in lines %}
+    <tr class="text-dark m-2 text-center">
+        <td><a href="/results?id={{line.id}}" >{{ line.id }}</a></td>
+        <td><a href="/results?name={{line.YourPokemon}}&place=1">{{ line.YourPokemon }}</a></td>
+        <td><a href="/results?name={{line.OpponentsPokemon}}&place=2" >{{ line.OpponentsPokemon }}</a></td>
+        <td><a href="/results?name={{line.Winner}}&place=3">{{ line.Winner }}</a></td>
+    </tr>
+    {% endfor %}
+</table> 
+{% endblock %}

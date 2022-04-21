@@ -1,0 +1,50 @@
+{% extends 'components/layout.html' %}
+{% include 'components/footer.html' %}
+
+{% block content %}
+<div class="container m-1">
+    <div class="row">
+        <form class="row" action="/letsbattle" method="POST">
+            {{ form.hidden_tag() }}
+            <div class="col-4">
+                {{ form.pokemon1input(class="col-4 m-5 form-control form-control-lg", placeholder="Choose your Pokemon!") }}
+            </div>
+            <div class="col-4">
+                {{ form.pokemon2input(class="col-4 m-5 form-control form-control-lg", placeholder="Opponent's Pokemon!") }}
+            </div>
+            <div class="col-4">
+                {{ form.submit(class="col-4 m-5 btn btn-danger border form-control form-control-lg")}}
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+
+{% block leftcol %} 
+<div class="bg-white mt-1 m-3 text-primary text-center">
+    <div class="m-5">
+        <img src="{{ pokemon1.sprite }}" alt="">
+        <h4>Pokemon: </h4><p>{{ pokemon1.name }}</p>
+        <h4>Attack: </h4><p>{{ pokemon1.attack }}</p>
+        <h4>Defense: </h4><p>{{ pokemon1.defense }}</p>
+        {% if winner and pokemon1.name == winner.name %}
+        <h2>Winner!</h2>
+        {% endif %}
+    </div>
+</div>
+{% endblock leftcol %} 
+
+{% block rightcol %} 
+<div class="bg-white mt-1 m-5 text-danger text-center">
+    <div class="m-3">
+        <img src="{{ pokemon2.sprite }}" alt="">
+        <h4>Pokemon: </h4><p>{{ pokemon2.name }}</p>
+        <h4>Attack: </h4><p>{{ pokemon2.attack }}</p>
+        <h4>Defense: </h4><p>{{ pokemon2.defense }}</p>
+        {%if winner and pokemon2.name == winner.name %}
+        <h2>Winner!</h2>
+        {% endif %}
+    </div>
+</div>
+{% endblock rightcol %} 

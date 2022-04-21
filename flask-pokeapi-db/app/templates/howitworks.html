@@ -1,0 +1,18 @@
+{% extends 'components/layout.html' %}
+{% include 'components/footer.html' %}
+
+{% block leftcol %} 
+<h2>
+    In the world of Pokemon, trainers like yourself with battle each other using their strongest Pokemon partners. There are many ways that a battle can be decided.
+</h2>
+<ul>
+    <li>The type of your Pokemon can play a big role in the advantage one Pokemon has over another. For examle, a water type Pokemon is strong against a fire type, but that water Pokemon will be weak against electric attacks.</li>
+    <li>The level of your partner Pokemon shows its experience level and overall strength. A level 40 Pokemon will generally be much stronger than a Pokemon that is only at level 25.</li>
+    <li>Another main factor to determine which of two Pokemon are stronger is comparing their Stats. Each Pokemon has its own unique stats for attack, defense, health points (HP), and speed.</li>
+</ul>
+{% endblock leftcol %} 
+
+
+{% block rightcol %} 
+<h2>In this app, you will be choosing a Pokemon to battle against another trainer's Pokemon. The Pokemon that your opponent sends out will be randomly generated, so choose yours wisely! The attack and defense stats will be compared to determine who will be victorious!</h2>
+{% endblock rightcol %} 
