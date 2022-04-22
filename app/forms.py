@@ -9,10 +9,6 @@ class PokeForm(FlaskForm):
     pokemon2input = StringField('Opponents Pokemon', validators=[DataRequired()])
     submit = SubmitField()
 
-# class PokeResults(FlaskForm):
-#     battlenum = IntegerField('Choose your Pokemon', validators=[DataRequired()])
-#     submit = SubmitField()
-
 class LoginForm(FlaskForm):
    name = StringField('Username', validators=[DataRequired()])
    password = PasswordField('Password', validators=[DataRequired()])
